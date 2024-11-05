@@ -1,0 +1,104 @@
+{
+    "year": 2024,
+    "budget": 30,
+    "id": "focker",
+    "name": "Fockers",
+    "gmail_account": "XXXXXXXXXXXXX@gmail.com",
+    "gmail_password": "XXXXXXXXXXXXX",
+    "people": {
+        "Person1": {
+            "alias": "Person1 (junior)",
+            "email": "XXXXXXXXXXXXX@gmail.com",
+            "partner": "Person2",
+            "is_active": true
+        },
+        "Person2": {
+            "email": "XXXXXXXXXXXXX@gmail.com",
+            "partner": "Person1",
+            "is_active": true
+        },
+        "Person3": {
+            "email": "XXXXXXXXXXXXX@gmail.com",
+            "partner": "Person4",
+            "is_active": true
+        },
+        "Person4": {
+            "email": "XXXXXXXXXXXXX@gmail.com",
+            "partner": "Person3",
+            "is_active": true
+        },
+        "Person5": {
+            "alias": "Person5 (junior)",
+            "email": "XXXXXXXXXXXXX@gmail.com",
+            "partner": "Person6",
+            "is_active": true
+        },
+        "Person6": {
+            "email": "XXXXXXXXXXXXX@gmail.com",
+            "partner": "Person5",
+            "is_active": true
+        },
+        "Person7": {
+            "email": "XXXXXXXXXXXXX@gmail.com",
+            "partner": "Person8",
+            "is_active": true
+        },
+        "Person8": {
+            "email": "XXXXXXXXXXXXX@gmail.com",
+            "partner": "Person7",
+            "is_active": true
+        },
+        "Person9": {
+            "alias": "Person9 (senior)",
+            "email": "XXXXXXXXXXXXX@gmail.com",
+            "partner": "Person10",
+            "is_active": true
+        },
+        "Person10": {
+            "alias": "Person10 (senior)",
+            "email": "XXXXXXXXXXXXX@gmail.com",
+            "partner": "Person9",
+            "is_active": true
+        },
+        "Person11": {
+            "email": "XXXXXXXXXXXXX@yahoo.com",
+            "partner": null,
+            "is_active": false
+        }
+    },
+    "previous": {
+        "2021": {
+            "Person4": "Person7",
+            "Person7": "Person3",
+            "Person3": "Person2",
+            "Person2": "Person1",
+            "Person1": "Person6",
+            "Person6": "Person5",
+            "Person5": "Person4"
+        },
+        "2022": {
+            "Person4": "Person9",
+            "Person7": "Person3",
+            "Person3": "Person2",
+            "Person2": "Person1",
+            "Person1": "Person6",
+            "Person6": "Person5",
+            "Person5": "Person4",
+            "Person9": "Person8",
+            "Person8": "Person7"
+        },
+        "2023": {
+            "Person11": "Person3",
+            "Person4": "Person9",
+            "Person7": "Person1",
+            "Person3": "Person6",
+            "Person2": "Person5",
+            "Person1": "Person7",
+            "Person6": "Person2",
+            "Person5": "Person8",
+            "Person8": "Person4",
+            "Person9": "Person10",
+            "Person10": "Person3"
+        }
+    }
+}
