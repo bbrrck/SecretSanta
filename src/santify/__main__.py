@@ -1,9 +1,11 @@
 # ruff: noqa: D100
 
 import argparse
+import sys
 from pathlib import Path
 
 from santify import generate_mapping_and_send_email
+from santify.logging import logger
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog="santify")
@@ -22,7 +24,32 @@ if __name__ == "__main__":
         action="store_true",
         help="Encrypt the output",
     )
+    parser.add_argument(
+        "-y",
+        "--skip-confirm",
+        action="store_true",
+        help="Do not prompt for confirmation",
+    )
+
     args = parser.parse_args()
+
+    if not args.skip_confirm:
+        logger.info("Running script with the following arguments:")
+        logger.info(f"-- Config file: {args.config_file}")
+        logger.info(f"-- Output directory: {args.outdir}")
+        logger.info(f"-- Debug mode? {args.debug}")
+        logger.info(f"-- Send emails? {args.email}")
+        logger.info(f"-- Encrypt output? {args.encrypt}")
+        logger.info("Are you sure you want to continue? (y/n)")
+        while True:
+            answer = input()
+            if answer.lower() in ["y", "yes"]:
+                logger.info("Continue running...")
+                break
+            if answer.lower() in ["n", "no"]:
+                logger.info("Exiting...")
+                sys.exit(0)
+            logger.info("Invalid input. Please enter 'y' or 'n'.")
 
     generate_mapping_and_send_email(
         config_file=args.config_file,

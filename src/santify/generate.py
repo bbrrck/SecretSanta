@@ -1,11 +1,13 @@
 # ruff: noqa: D100
 
 import json
+import os
 import random
 import sys
 from pathlib import Path
 
 from cryptography.fernet import Fernet
+from dotenv import load_dotenv
 
 from santify.email import send_email as _send_email
 from santify.logging import logger
@@ -18,8 +20,10 @@ from santify.mapping import (
     get_active_santas,
 )
 
+_ = load_dotenv()
 
-def generate_mapping_and_send_email(  # noqa: PLR0915
+
+def generate_mapping_and_send_email(  # noqa: C901, PLR0915
     config_file: Path,
     output_dir: str | None = None,
     *,
@@ -100,9 +104,22 @@ def generate_mapping_and_send_email(  # noqa: PLR0915
     )
 
     if debug_mode:
-        logger.info(f"Generated mapping:\n{name_mapping}")
+        logger.info(f"DEBUG MODE: Generated mapping:\n{name_mapping}")
 
     if send_email:
+
+        def get_env_var_or_die(var_name: str) -> str:
+            """Get the value of an environment variable."""
+            value = os.getenv(var_name)
+            if value is None:
+                msg = f"{var_name} environment variable is not set"
+                logger.error(msg)
+                raise RuntimeError(msg)
+            return value
+
+        gmail_account = get_env_var_or_die("GMAIL_ACCOUNT")
+        gmail_password = get_env_var_or_die("GMAIL_APP_PASSWORD")
+
         logger.info("Sending email")
         for santa_name, santee_name in name_mapping.mapping.items():
             santa = santas_by_name[santa_name]
@@ -111,12 +128,15 @@ def generate_mapping_and_send_email(  # noqa: PLR0915
                 santa=santa,
                 santee=santee,
                 year=config["year"],
-                sender=config["gmail_account"],
-                password=config["gmail_password"],
+                sender=gmail_account,
+                password=gmail_password,
                 family_name=config["name"],
                 budget=config["budget"],
                 debug_mode=debug_mode,
             )
+            # Only send one email in debug mode
+            if debug_mode:
+                break
     else:
         logger.info("Not sending email")
 

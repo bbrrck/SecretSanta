@@ -19,7 +19,7 @@ def send_email(  # noqa: PLR0913
 ) -> None:
     """Send an email to Santa."""
     budget_message = f"Limit na darček: {budget}€. " if budget else ""
-    santa_email = sender if debug_mode else ""  # santa.email
+    santa_email = sender if debug_mode else santa.email
     santee_name = santee.alias if santee.alias else santee.name
 
     yag = yagmail.SMTP(sender, password=password)
