@@ -27,6 +27,9 @@ namespaces = false
 requires = ["wheel", "setuptools"]
 build-backend = "setuptools.build_meta"
 
+[project.scripts]
+santify = "santify.__main__:main"
+
 [tool.ruff]
 
 [tool.ruff.lint]

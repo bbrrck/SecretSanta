@@ -7,7 +7,9 @@ from pathlib import Path
 from santify import generate_mapping_and_send_email
 from santify.logging import logger
 
-if __name__ == "__main__":
+
+def main() -> None:
+    """Run the main function."""
     parser = argparse.ArgumentParser(prog="santify")
     parser.add_argument("config_file", type=Path, help="Path to the config file")
     parser.add_argument("-o", "--outdir", type=Path, help="Output directory")
@@ -58,3 +60,7 @@ if __name__ == "__main__":
         send_email=args.email,
         debug_mode=args.debug,
     )
+
+
+if __name__ == "__main__":
+    main()
