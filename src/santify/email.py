@@ -2,7 +2,7 @@
 
 import yagmail
 
-from santify.logging import logger
+from santify.logging import console
 from santify.mapping import Person
 
 
@@ -15,6 +15,7 @@ def send_email(  # noqa: PLR0913
     family_name: str,
     theme: str | None = None,
     budget: int | None = None,
+    email_subject_suffix: str = "",
     *,
     debug_mode: bool = True,
 ) -> None:
@@ -27,17 +28,16 @@ def send_email(  # noqa: PLR0913
     yag = yagmail.SMTP(sender, password=password)
     yag.send(
         to=santa_email,
-        subject=f"{family_name} Secret Santa {year}! 🎄🎅",
+        subject=f"{family_name} Secret Santa {year}! 🎄🎅 {email_subject_suffix}",
         contents=f"""Ahoj {santa.name},
 
 Tento rok si Secret Santa pre: <strong>{santee_name}</strong>.
 
-Pšt, nikomu to nehovor!
+Pšt, nikomu to nehovor! 🤫
 
 {theme_message}
 
 <small>{budget_message}Túto správu poslal Tiborov SecretSantaBot3.0.</small>""",
     )
 
-    msg = f"email sucessfully sent to '{santa.name}' <{santa_email}>"
-    logger.info(msg)
+    console.success(f"Email sent to '{santa.name}' <{santa_email}>")

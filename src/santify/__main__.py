@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 
 from santify import generate_mapping_and_send_email
-from santify.logging import logger
+from santify.logging import console
 
 
 def main() -> None:
@@ -35,23 +35,17 @@ def main() -> None:
 
     args = parser.parse_args()
 
-    if not args.skip_confirm:
-        logger.info("Running script with the following arguments:")
-        logger.info(f"-- Config file: {args.config_file}")
-        logger.info(f"-- Output directory: {args.outdir}")
-        logger.info(f"-- Debug mode? {args.debug}")
-        logger.info(f"-- Send emails? {args.email}")
-        logger.info(f"-- Encrypt output? {args.encrypt}")
-        logger.info("Are you sure you want to continue? (y/n)")
-        while True:
-            answer = input()
-            if answer.lower() in ["y", "yes"]:
-                logger.info("Continue running...")
-                break
-            if answer.lower() in ["n", "no"]:
-                logger.info("Exiting...")
-                sys.exit(0)
-            logger.info("Invalid input. Please enter 'y' or 'n'.")
+    console.info("Running script with the following arguments:")
+    console.info(f"• Config file     : [blue]{args.config_file}")
+    console.info(f"• Output directory: [blue]{args.outdir}")
+    console.info(f"• Debug mode?       {args.debug}")
+    console.info(f"• Send emails?      {args.email}")
+    console.info(f"• Encrypt output?   {args.encrypt}")
+
+    confirm = console.confirm("Continue?") or args.skip_confirm
+    if not confirm:
+        console.info("Aborting script.")
+        return
 
     generate_mapping_and_send_email(
         config_file=args.config_file,

@@ -2,7 +2,7 @@
 import random
 from dataclasses import dataclass
 
-from santify.logging import logger
+from santify.logging import console
 
 Constraint = tuple[str, str]
 
@@ -153,14 +153,14 @@ def generate_mapping(
     while not is_mapping(names, permutation, constraints):
         if counter > max_iter:
             msg = f"Failed to generate a mapping after {max_iter} iterations"
-            logger.error(msg)
+            console.error(msg)
             raise RuntimeError(msg)
 
         permutation = generate_permutation(names)
         counter += 1
 
     msg = f"Valid mapping generated after {counter} attempts"
-    logger.info(msg)
+    console.info(msg)
 
     mapping = dict(zip(names, permutation, strict=True))
 

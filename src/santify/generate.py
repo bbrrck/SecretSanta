@@ -1,5 +1,5 @@
 # ruff: noqa: D100
-
+from __future__ import annotations
 import json
 import os
 import random
@@ -10,7 +10,7 @@ from cryptography.fernet import Fernet
 from dotenv import load_dotenv
 
 from santify.email import send_email as _send_email
-from santify.logging import logger
+from santify.logging import console
 from santify.mapping import (
     Mapping,
     Person,
@@ -58,9 +58,9 @@ def generate_mapping_and_send_email(  # noqa: C901, PLR0915
     """
     seed = random.randrange(sys.maxsize)  # noqa: S311
     random.seed(seed)
-    logger.info(f"random {seed=}")
+    console.info(f"random seed: {seed}")
 
-    logger.info(f"Reading configuration from {config_file}")
+    console.info(f"Reading configuration from {config_file}")
     with config_file.open() as f:
         config = json.load(f)
 
@@ -71,15 +71,15 @@ def generate_mapping_and_send_email(  # noqa: C901, PLR0915
         person = Person(**person_details)
         people.append(person)
 
-    logger.info(f"Number of people: {len(people)}")
-    logger.info(", ".join([x.name for x in people]))
+    console.info(f"Number of people: {len(people)}")
+    console.debug(", ".join([x.name for x in people]))
 
     # Get active santas
     santas = get_active_santas(people)
     santas_by_name = {santa.name: santa for santa in santas}
 
-    logger.info(f"Number of santas (active people): {len(santas)}")
-    logger.info(", ".join([x.name for x in santas]))
+    console.info(f"Number of santas (active people): {len(santas)}")
+    console.debug(", ".join([x.name for x in santas]))
 
     # Construct past mappings
     past_mappings = []
@@ -104,7 +104,7 @@ def generate_mapping_and_send_email(  # noqa: C901, PLR0915
     )
 
     if debug_mode:
-        logger.info(f"DEBUG MODE: Generated mapping:\n{name_mapping}")
+        console.debug(f"Generated mapping:\n{name_mapping}")
 
     if send_email:
 
@@ -113,14 +113,14 @@ def generate_mapping_and_send_email(  # noqa: C901, PLR0915
             value = os.getenv(var_name)
             if value is None:
                 msg = f"{var_name} environment variable is not set"
-                logger.error(msg)
+                console.error(msg)
                 raise RuntimeError(msg)
             return value
 
         gmail_account = get_env_var_or_die("GMAIL_ACCOUNT")
         gmail_password = get_env_var_or_die("GMAIL_APP_PASSWORD")
 
-        logger.info("Sending email")
+        console.info("Sending email")
         for santa_name, santee_name in name_mapping.mapping.items():
             santa = santas_by_name[santa_name]
             santee = santas_by_name[santee_name]
@@ -133,17 +133,18 @@ def generate_mapping_and_send_email(  # noqa: C901, PLR0915
                 family_name=config["name"],
                 budget=config["budget"],
                 theme=config.get("theme"),
+                email_subject_suffix=config.get("email_subject_suffix", ""),
                 debug_mode=debug_mode,
             )
             # Only send one email in debug mode
             if debug_mode:
                 break
     else:
-        logger.info("Not sending email")
+        console.info("Not sending email")
 
     if output_dir:
         mapping_file = output_dir / f"mapping_{config['id']}_{config['year']}.json"
-        logger.info(
+        console.info(
             f"Saving {'encrypted ' if encrypt else ''}mapping to {mapping_file}",
         )
         if encrypt:
@@ -163,3 +164,5 @@ def generate_mapping_and_send_email(  # noqa: C901, PLR0915
             _o[santa] = fernet.encrypt(santee.encode()).decode() if fernet else santee
         with mapping_file.open("w") as f:
             json.dump(_o, f, indent=4, sort_keys=True, ensure_ascii=False)
+
+        console.success(f"Mapping saved to {mapping_file}")
