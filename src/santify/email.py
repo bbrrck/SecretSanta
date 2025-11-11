@@ -13,11 +13,13 @@ def send_email(  # noqa: PLR0913
     password: str,
     year: int,
     family_name: str,
+    theme: str | None = None,
     budget: int | None = None,
     *,
     debug_mode: bool = True,
 ) -> None:
     """Send an email to Santa."""
+    theme_message = f"Tohtoročná téma je: <strong>{theme}</strong>" if theme else ""
     budget_message = f"Limit na darček: {budget}€. " if budget else ""
     santa_email = sender if debug_mode else santa.email
     santee_name = santee.alias if santee.alias else santee.name
@@ -31,6 +33,8 @@ def send_email(  # noqa: PLR0913
 Tento rok si Secret Santa pre: <strong>{santee_name}</strong>.
 
 Pšt, nikomu to nehovor!
+
+{theme_message}
 
 <small>{budget_message}Túto správu poslal Tiborov SecretSantaBot3.0.</small>""",
     )

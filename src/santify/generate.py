@@ -132,6 +132,7 @@ def generate_mapping_and_send_email(  # noqa: C901, PLR0915
                 password=gmail_password,
                 family_name=config["name"],
                 budget=config["budget"],
+                theme=config.get("theme"),
                 debug_mode=debug_mode,
             )
             # Only send one email in debug mode
