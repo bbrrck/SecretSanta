@@ -1,7 +1,6 @@
 # ruff: noqa: D100
 
 import argparse
-import sys
 from pathlib import Path
 
 from santify import generate_mapping_and_send_email

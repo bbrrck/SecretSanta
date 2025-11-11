@@ -7,8 +7,6 @@ Santa gift exchange organizer that automatically assigns givers and recipients w
 Using [uv](https://github.com/astral-sh/uv):
 
 ```sh
-uv venv
-source .venv/bin/activate
 uv sync
 ```
 
@@ -17,7 +15,7 @@ uv sync
 Run as command line script:
 
 ```sh
-python -m santify config.json
+uv run santify config/2025/config-stankovci-2025.json --outdir .output --encrypt --email
 ```
 
 Additional command line arguments:
